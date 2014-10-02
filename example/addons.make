@@ -1,0 +1,2 @@
+ofxAppUpdateNotifier
+ofxJSON
