@@ -22,8 +22,9 @@ namespace AppUpdateNotifier
 class ofxAppUpdateNotifier
 {
 public:
-	void init(int currentVersionNumber, string url, int frequencyInHours);
+	void init(int currentVersionNumber, string url, int frequencyInHours, string filename = "AppUpdateLastCheckedDate");
 	void update();
+	void exit();
 
 	ofEvent<AppUpdateNotifier::Version> newVersionAvailable;
 
@@ -35,4 +36,5 @@ private:
 	int _frequency;
 	float _lastCheckedDate;
 	bool _hasFoundANewVersion;
+	string _filename;
 };

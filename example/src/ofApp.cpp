@@ -14,6 +14,12 @@ void ofApp::update()
 }
 
 //--------------------------------------------------------------
+void ofApp::exit()
+{
+	_appUpdateNotifier.exit();
+}
+
+//--------------------------------------------------------------
 void ofApp::onNewVersionAvailable(AppUpdateNotifier::Version& version)
 {
 	ofLog() << "A new version is available: " << version.displayNumber << " download it there: " << version.url;
