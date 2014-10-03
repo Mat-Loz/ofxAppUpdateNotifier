@@ -19,16 +19,16 @@ namespace AppUpdateNotifier
 }
 
 
-class ofxAppUpdateNotifier
+class ofxAppUpdateNotifier : public ofThread
 {
 public:
-	void init(int currentVersionNumber, string url, int frequencyInHours, string filename = "AppUpdateLastCheckedDate");
-	void update();
+	void init(int currentVersionNumber, string url, int frequencyInHours, string filename = "AppUpdateLastCheckedDate");	
 	void exit();
 
 	ofEvent<AppUpdateNotifier::Version> newVersionAvailable;
 
 private:
+	void threadedFunction();
 	void checkNewVersion();
 
 	int _currentVersionNumber;

@@ -8,12 +8,6 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::update()
-{
-	_appUpdateNotifier.update();
-}
-
-//--------------------------------------------------------------
 void ofApp::exit()
 {
 	_appUpdateNotifier.exit();

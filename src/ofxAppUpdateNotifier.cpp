@@ -31,21 +31,32 @@ void ofxAppUpdateNotifier::init(int currentVersionNumber, string url, int freque
 			_lastCheckedDate = -_frequency;	// check now
 		}
 	}
+
+	startThread();
 }
 
 //--------------------------------------------------------------
-void ofxAppUpdateNotifier::update()
+void ofxAppUpdateNotifier::threadedFunction()
 {
-	if (_hasFoundANewVersion || _frequency <= 0)
-		return;
+	while (isThreadRunning())
+	{
+		if (lock())
+        {
+			if (_hasFoundANewVersion || _frequency <= 0)
+				return;
 
-	if (ofGetElapsedTimef() - _lastCheckedDate >= _frequency)
-		checkNewVersion();
+			if (ofGetElapsedTimef() - _lastCheckedDate >= _frequency)
+				checkNewVersion();
+		}
+		unlock();
+	}
 }
 
 //--------------------------------------------------------------
 void ofxAppUpdateNotifier::exit()
 {
+	waitForThread();
+
 	// write last checked date to file on disk
 	ofstream file(ofToDataPath(_filename));
 	file << time(NULL);
