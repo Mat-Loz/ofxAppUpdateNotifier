@@ -52,7 +52,7 @@ void ofxAppUpdateNotifier::exit()
 	stopThread();
 
 	// write last checked date to file on disk
-	ofstream file(ofToDataPath(_filename));
+	ofstream file(ofToDataPath(_filename).c_str());
 	file << time(NULL);
 	file.close();
 }
