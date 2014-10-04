@@ -1,7 +1,7 @@
 ofxAppUpdateNotifier
 ====================
 
-An OpenFrameworks addon to notify when a new app release of your app is available
+An OpenFrameworks addon to notify user when a new release of your app is available
 
 * URL can be local (for tests) or distant
 * Frequency of checks can be parameterized (every X hours or when application starts)
