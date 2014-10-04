@@ -10,7 +10,6 @@ void ofxAppUpdateNotifier::init(int currentVersionNumber, string url, int freque
 	_currentVersionNumber = currentVersionNumber;
 	_url = url;
 	_frequency = frequencyInHours * 3600;
-	_hasFoundANewVersion = false;
 	_filename = filename;
 
 	if (_frequency == 0)
@@ -30,9 +29,9 @@ void ofxAppUpdateNotifier::init(int currentVersionNumber, string url, int freque
 		{
 			_lastCheckedDate = -_frequency;	// check now
 		}
-	}
 
-	startThread();
+		startThread();
+	}	
 }
 
 //--------------------------------------------------------------
@@ -40,22 +39,17 @@ void ofxAppUpdateNotifier::threadedFunction()
 {
 	while (isThreadRunning())
 	{
-		if (lock())
-        {
-			if (_hasFoundANewVersion || _frequency <= 0)
-				return;
-
-			if (ofGetElapsedTimef() - _lastCheckedDate >= _frequency)
-				checkNewVersion();
-		}
-		unlock();
+		if (ofGetElapsedTimef() - _lastCheckedDate >= _frequency)
+			checkNewVersion();
+		else
+			ofSleepMillis(1000 * (_frequency + _lastCheckedDate));
 	}
 }
 
 //--------------------------------------------------------------
 void ofxAppUpdateNotifier::exit()
 {
-	waitForThread();
+	stopThread();
 
 	// write last checked date to file on disk
 	ofstream file(ofToDataPath(_filename));
@@ -73,6 +67,7 @@ void ofxAppUpdateNotifier::checkNewVersion()
 	}
 	else
 	{
+		_lastCheckedDate = ofGetElapsedTimef();
 		int versionNumber = response["number"].asInt();
 		if (versionNumber > _currentVersionNumber)
 		{
@@ -83,9 +78,10 @@ void ofxAppUpdateNotifier::checkNewVersion()
 			version.url = response["url"].asString();
 
 			ofNotifyEvent(newVersionAvailable, version, this);
-			_hasFoundANewVersion = true;
-		}
 
-		_lastCheckedDate = ofGetElapsedTimef();
-	}	
+			stopThread();
+		}		
+	}
+
+	sleep(1000 * _frequency);
 }

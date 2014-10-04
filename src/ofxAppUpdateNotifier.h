@@ -35,6 +35,5 @@ private:
 	string _url;
 	int _frequency;
 	float _lastCheckedDate;
-	bool _hasFoundANewVersion;
 	string _filename;
 };
